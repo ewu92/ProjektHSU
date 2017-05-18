@@ -1,6 +1,7 @@
 package View;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import Model.Kunde;
@@ -56,10 +58,32 @@ public class Kundenverwaltung extends JFrame {
 					kunden.get(i).getEmail()};
 			dtm.addRow(data2);
 		}
-		TableColumn column = table.getColumnModel().getColumn(2);
-	    column.setPreferredWidth(10); 
-	    column = table.getColumnModel().getColumn(3);
-	    column.setPreferredWidth(120);
+	    
+		// Anpassen der Breite der einzelnen Spalten
+	    for (int column = 0; column < table.getColumnCount(); column++)
+	    {
+	        TableColumn tableColumn = table.getColumnModel().getColumn(column);
+	        int preferredWidth = tableColumn.getMinWidth();
+	        int maxWidth = tableColumn.getMaxWidth();
+
+	        for (int row = 0; row < table.getRowCount(); row++)
+	        {
+	            TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+	            Component c = table.prepareRenderer(cellRenderer, row, column);
+	            int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+	            preferredWidth = Math.max(preferredWidth, width);
+
+	            //  We've exceeded the maximum width, no need to check other rows
+
+	            if (preferredWidth >= maxWidth)
+	            {
+	                preferredWidth = maxWidth;
+	                break;
+	            }
+	        }
+
+	        tableColumn.setPreferredWidth( preferredWidth );
+	    }
 	}
 	
 	public void setBuecherVerwaltung(Buecherverwaltung bvn){
