@@ -47,8 +47,8 @@ public class KundeHinzufuegen extends JFrame {
 	public KundeHinzufuegen() {
 		khf = this;
 		setTitle("Kunde hinzuf\u00FCgen");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 300);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 600, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -102,16 +102,11 @@ public class KundeHinzufuegen extends JFrame {
 					JOptionPane.showMessageDialog(null, "Fehler beim Konvertieren in Integer", "Fehler", JOptionPane.OK_OPTION);
 				}
 				
-				Date date = null;
-				SimpleDateFormat formatter = new SimpleDateFormat("DD-MM-YYYY");
-				try {
-					date = formatter.parse(tagi + "-" + monati + "-" + jahri);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				String date = tagi + "-" + monati + "-" + jahri;
 				
 				Kunde kunde = new Kunde(nachname, vorname, date, ort, plzi, strasse, hausnummeri, email);
 				kv.getKunden().add(kunde);
+				kv.showKundenTable();
 				
 				khf.setVisible(false);
 			}
@@ -125,7 +120,7 @@ public class KundeHinzufuegen extends JFrame {
 				khf.setVisible(false);
 			}
 		});
-		btnAbbrechen.setBounds(275, 203, 89, 23);
+		btnAbbrechen.setBounds(275, 203, 106, 23);
 		contentPane.add(btnAbbrechen);
 		
 		JLabel lblVorname = new JLabel("Vorname:");
@@ -151,30 +146,30 @@ public class KundeHinzufuegen extends JFrame {
 		contentPane.add(lblGeburtsdatum);
 		
 		textFieldTag = new JTextField();
-		textFieldTag.setBounds(145, 58, 35, 20);
+		textFieldTag.setBounds(167, 58, 35, 20);
 		contentPane.add(textFieldTag);
 		textFieldTag.setColumns(10);
 		
 		JLabel lblTag = new JLabel("Tag:");
-		lblTag.setBounds(121, 61, 22, 14);
+		lblTag.setBounds(121, 61, 36, 14);
 		contentPane.add(lblTag);
 		
 		JLabel lblMonat = new JLabel("Monat:");
-		lblMonat.setBounds(190, 61, 35, 14);
+		lblMonat.setBounds(212, 61, 54, 14);
 		contentPane.add(lblMonat);
 		
 		textFieldMonat = new JTextField();
 		textFieldMonat.setColumns(10);
-		textFieldMonat.setBounds(229, 58, 41, 20);
+		textFieldMonat.setBounds(264, 58, 41, 20);
 		contentPane.add(textFieldMonat);
 		
 		JLabel lblJahr = new JLabel("Jahr:");
-		lblJahr.setBounds(284, 61, 25, 14);
+		lblJahr.setBounds(316, 61, 35, 14);
 		contentPane.add(lblJahr);
 		
 		textFieldJahr = new JTextField();
 		textFieldJahr.setColumns(10);
-		textFieldJahr.setBounds(316, 58, 71, 20);
+		textFieldJahr.setBounds(352, 58, 71, 20);
 		contentPane.add(textFieldJahr);
 		
 		JLabel lblWohnort = new JLabel("Wohnort:");
@@ -196,21 +191,21 @@ public class KundeHinzufuegen extends JFrame {
 		contentPane.add(textFieldStrasse);
 		
 		JLabel lblHausnummer = new JLabel("Hausnummer:");
-		lblHausnummer.setBounds(316, 111, 71, 14);
+		lblHausnummer.setBounds(316, 111, 86, 14);
 		contentPane.add(lblHausnummer);
 		
 		textFieldHausnummer = new JTextField();
 		textFieldHausnummer.setColumns(10);
-		textFieldHausnummer.setBounds(397, 108, 54, 20);
+		textFieldHausnummer.setBounds(412, 108, 54, 20);
 		contentPane.add(textFieldHausnummer);
 		
 		JLabel lblPlz = new JLabel("Posleitzahl:");
-		lblPlz.setBounds(316, 86, 71, 14);
+		lblPlz.setBounds(316, 86, 86, 14);
 		contentPane.add(lblPlz);
 		
 		textFieldPlz = new JTextField();
 		textFieldPlz.setColumns(10);
-		textFieldPlz.setBounds(397, 83, 54, 20);
+		textFieldPlz.setBounds(412, 83, 54, 20);
 		contentPane.add(textFieldPlz);
 		
 		JLabel lblEmail = new JLabel("E-Mail:");

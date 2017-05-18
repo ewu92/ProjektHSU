@@ -6,14 +6,14 @@ public class Kunde {
 
 	private String name;
 	private String vorname;
-	private Date geburtsdatum;
+	private String geburtsdatum;
 	private String ort;
 	private int plz;
 	private String strasse;
 	private int hausnummer;
 	private String email;
 	
-	public Kunde(String name, String vorname, Date geburtsdatum, String ort, int plz, String strasse, int hausnummer, String email){
+	public Kunde(String name, String vorname, String geburtsdatum, String ort, int plz, String strasse, int hausnummer, String email){
 		this.name = name;
 		this.vorname = vorname;
 		this.geburtsdatum = geburtsdatum;
@@ -38,10 +38,10 @@ public class Kunde {
 		this.vorname = vorname;
 	}
 	
-	public Date getGeburtsdatum() {
+	public String getGeburtsdatum() {
 		return geburtsdatum;
 	}
-	public void setGeburtsdatum(Date geburtsdatum) {
+	public void setGeburtsdatum(String geburtsdatum) {
 		this.geburtsdatum = geburtsdatum;
 	}
 
