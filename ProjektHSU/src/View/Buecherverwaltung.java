@@ -29,7 +29,7 @@ public class Buecherverwaltung extends JFrame {
 					kv = new Kundenverwaltung();
 					kv.setVisible(false);
 					bv.setVisible(true);
-					kv.setVerwaltung(bv, kv);
+					kv.setBuecherVerwaltung(bv);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

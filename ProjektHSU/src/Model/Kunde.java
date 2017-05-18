@@ -7,14 +7,20 @@ public class Kunde {
 	private String name;
 	private String vorname;
 	private Date geburtsdatum;
-	private String addresse;
+	private String ort;
+	private int plz;
+	private String strasse;
+	private int hausnummer;
 	private String email;
 	
-	public Kunde(String name, String vorname, Date geburtsdatum, String addresse, String email){
+	public Kunde(String name, String vorname, Date geburtsdatum, String ort, int plz, String strasse, int hausnummer, String email){
 		this.name = name;
 		this.vorname = vorname;
 		this.geburtsdatum = geburtsdatum;
-		this.addresse = addresse;
+		this.ort = ort;
+		this.plz = plz;
+		this.strasse = strasse;
+		this.hausnummer = hausnummer;
 		this.email = email;
 	}
 	
@@ -38,12 +44,33 @@ public class Kunde {
 	public void setGeburtsdatum(Date geburtsdatum) {
 		this.geburtsdatum = geburtsdatum;
 	}
-	
-	public String getAddresse() {
-		return addresse;
+
+	public String getOrt() {
+		return ort;
 	}
-	public void setAddresse(String addresse) {
-		this.addresse = addresse;
+	public void setOrt(String ort) {
+		this.ort = ort;
+	}
+
+	public int getPlz() {
+		return plz;
+	}
+	public void setPlz(int plz) {
+		this.plz = plz;
+	}
+
+	public String getStrasse() {
+		return strasse;
+	}
+	public void setStrasse(String strasse) {
+		this.strasse = strasse;
+	}
+
+	public int getHausnummer() {
+		return hausnummer;
+	}
+	public void setHausnummer(int hausnummer) {
+		this.hausnummer = hausnummer;
 	}
 	
 	public String getEmail() {
