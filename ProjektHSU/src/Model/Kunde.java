@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Kunde {
 
+	private int kundennr;
 	private String name;
 	private String vorname;
 	private String geburtsdatum;
@@ -13,7 +14,8 @@ public class Kunde {
 	private int hausnummer;
 	private String email;
 	
-	public Kunde(String name, String vorname, String geburtsdatum, String ort, int plz, String strasse, int hausnummer, String email){
+	public Kunde(int kundennr, String name, String vorname, String geburtsdatum, String ort, int plz, String strasse, int hausnummer, String email){
+		this.kundennr = kundennr;
 		this.name = name;
 		this.vorname = vorname;
 		this.geburtsdatum = geburtsdatum;
@@ -22,6 +24,13 @@ public class Kunde {
 		this.strasse = strasse;
 		this.hausnummer = hausnummer;
 		this.email = email;
+	}
+	
+	public int getKundennr() {
+		return kundennr;
+	}
+	public void setKundennr(int kundennr) {
+		this.kundennr = kundennr;
 	}
 	
 	public String getName() {

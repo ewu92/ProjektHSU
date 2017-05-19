@@ -2,19 +2,31 @@ package Model;
 
 public class Buch {
 
+	private int buchnr;
 	private String titel;
 	private String autor;
 	private String isbn;
 	private int erscheinungsjahr;
 	private String verlag;
+	private boolean ausleihstatus;
 	
-	public Buch(String titel, String autor, String isbn, int erscheinungsjahr, String verlag){
+	public Buch(int buchnr, String titel, String autor, String isbn, int erscheinungsjahr, String verlag){
+		this.buchnr = buchnr;
 		this.titel = titel;
 		this.autor = autor;
 		this.isbn = isbn;
 		this.erscheinungsjahr = erscheinungsjahr;
 		this.verlag = verlag;
+		this.ausleihstatus = false;
 	}
+	
+	public int getBuchnr() {
+		return buchnr;
+	}
+	public void setBuchnr(int buchnr) {
+		this.buchnr = buchnr;
+	}
+	
 	
 	public String getTitel() {
 		return titel;
@@ -50,5 +62,12 @@ public class Buch {
 	public void setVerlag(String verlag) {
 		this.verlag = verlag;
 	}
-	
+
+	public boolean getAusleihstatus() {
+		return ausleihstatus;
+	}
+	public void setAusleihstatus(boolean ausleihstatus) {
+		this.ausleihstatus = ausleihstatus;
+	}
+
 }

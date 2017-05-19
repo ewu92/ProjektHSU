@@ -16,6 +16,7 @@ import Model.Kunde;
 import Model.Kunden;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 
 public class Kundenverwaltung extends JFrame {
@@ -33,10 +35,19 @@ public class Kundenverwaltung extends JFrame {
 	private static Buecherverwaltung bv;
 	private static Kundenverwaltung kv;
 	private static KundeHinzufuegen khf;
+	private static int kundennr = 1;
 	private JTable table;
 	
 	public Kunden getKunden(){
 		return kunden;
+	}
+	
+	public int getKundenNr(){
+		return kundennr;
+	}
+	
+	public void incKundenNr(){
+		kundennr = kundennr + 1;
 	}
 	
 	public void showKundenTable(){
@@ -45,7 +56,7 @@ public class Kundenverwaltung extends JFrame {
 		//set model into the table object
 		table.setModel(dtm);
 		
-		Object[] o = new Object[] { "Vorname", "Nachname", "Geburtsdatum", "Addresse", "E-Mail"};
+		Object[] o = new Object[] { "Nr", "Vorname", "Nachname", "Geburtsdatum", "Addresse", "E-Mail"};
 		dtm.setColumnIdentifiers(o);
 
 		// add row dynamically into the table      
@@ -53,7 +64,7 @@ public class Kundenverwaltung extends JFrame {
 			dtm.removeRow(i);
 		}
 		for(int i = 0; i < kunden.size(); i++){
-			Object[] data2 = {kunden.get(i).getVorname(), kunden.get(i).getName(), kunden.get(i).getGeburtsdatum().toString(), 
+			Object[] data2 = {kunden.get(i).getKundennr(), kunden.get(i).getVorname(), kunden.get(i).getName(), kunden.get(i).getGeburtsdatum().toString(), 
 					kunden.get(i).getPlz() + " " + kunden.get(i).getOrt() + " " + kunden.get(i).getStrasse() + " " + kunden.get(i).getHausnummer(),
 					kunden.get(i).getEmail()};
 			dtm.addRow(data2);
@@ -96,7 +107,12 @@ public class Kundenverwaltung extends JFrame {
 	public Kundenverwaltung() {
 		kv = this;
 		kunden = new Kunden();
-		kunden.add(new Kunde("Mustermann", "Max", "13-12-1992", "Musterstadt", 99543, "Musterstraße", 12, "max.mustermann@web.de"));
+		kunden.add(new Kunde(kundennr, "Mustermann", "Max", "13-12-1992", "Musterstadt", 99543, "Musterstraße", 12, "max.mustermann@web.de"));
+		incKundenNr();
+		
+		kunden.add(new Kunde(kundennr, "Werkmann", "Daniel", "05-02-1996", "Ulm", 88600, "Maliweg", 18, "daniel.werkmann@e-mail.de"));
+		incKundenNr();
+		
 		khf = new KundeHinzufuegen();
 		khf.setVisible(false);
 		khf.setKundenverwaltung(this);
@@ -132,8 +148,21 @@ public class Kundenverwaltung extends JFrame {
 		btnKundeLoeschen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
-				((DefaultTableModel)table.getModel()).removeRow(row);
-				kunden.removeAtIndex(row);
+				if(row != -1){
+					String str = table.getValueAt(row, 0).toString();
+					int nr = Integer.parseInt(str);
+					((DefaultTableModel)table.getModel()).removeRow(row);
+					
+					// Suche Kunde mit KundenNr
+					for(int i = 0; i < kunden.size(); i++){
+						if(nr == kunden.get(i).getKundennr()){
+							kunden.removeAtIndex(i);
+							return;
+						}
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Treffen Sie zuerst eine Wahl", "Fehler", JOptionPane.OK_OPTION);
+				}
 			}
 		});
 		btnKundeLoeschen.setBounds(41, 405, 135, 23);
@@ -147,6 +176,9 @@ public class Kundenverwaltung extends JFrame {
 		
 		// Macht die einzelnen Zellen uneditierbar
 		table.setDefaultEditor(Object.class, null);
+		
+		// Nur eine Zeile auswählbar
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(table);
 	}
 }

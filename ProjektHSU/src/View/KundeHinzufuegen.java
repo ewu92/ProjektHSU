@@ -40,6 +40,14 @@ public class KundeHinzufuegen extends JFrame {
 	private JTextField textFieldHausnummer;
 	private JTextField textFieldPlz;
 	private JTextField textFieldEmail;
+	
+	public String getTextWithException(JTextField field) throws Exception{
+		String str = field.getText();
+		if(str.isEmpty()){
+			throw new Exception();
+		}
+		return str;
+	}
 
 	/**
 	 * Create the frame.
@@ -69,19 +77,20 @@ public class KundeHinzufuegen extends JFrame {
 				String email = "";
 				
 				try{
-					vorname = textFieldVorname.getText();
-					nachname = textFieldNachname.getText();
-					tag = textFieldTag.getText();
-					monat = textFieldMonat.getText();
-					jahr = textFieldJahr.getText();
-					ort = textFieldWohnort.getText();
-					strasse = textFieldStrasse.getText();
-					hausnummer = textFieldHausnummer.getText();
-					plz = textFieldPlz.getText();
-					email = textFieldEmail.getText();
+					vorname = getTextWithException(textFieldVorname);
+					nachname = getTextWithException(textFieldNachname);
+					tag = getTextWithException(textFieldTag);
+					monat = getTextWithException(textFieldMonat);
+					jahr = getTextWithException(textFieldJahr);
+					ort = getTextWithException(textFieldWohnort);
+					strasse = getTextWithException(textFieldStrasse);
+					hausnummer = getTextWithException(textFieldHausnummer);
+					plz = getTextWithException(textFieldPlz);
+					email = getTextWithException(textFieldEmail);
 					
 				}catch(Exception e){
 					JOptionPane.showMessageDialog(null, "Fehler", "Fehler", JOptionPane.OK_OPTION);
+					return;
 				}
 				
 				int tagi = 0;
@@ -100,11 +109,13 @@ public class KundeHinzufuegen extends JFrame {
 					
 				}catch(Exception e){
 					JOptionPane.showMessageDialog(null, "Fehler beim Konvertieren in Integer", "Fehler", JOptionPane.OK_OPTION);
+					return;
 				}
 				
 				String date = tagi + "-" + monati + "-" + jahri;
 				
-				Kunde kunde = new Kunde(nachname, vorname, date, ort, plzi, strasse, hausnummeri, email);
+				Kunde kunde = new Kunde(kv.getKundenNr(), nachname, vorname, date, ort, plzi, strasse, hausnummeri, email);
+				kv.incKundenNr();
 				kv.getKunden().add(kunde);
 				kv.showKundenTable();
 				
