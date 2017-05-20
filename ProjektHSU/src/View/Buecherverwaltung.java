@@ -79,16 +79,18 @@ public class Buecherverwaltung extends JFrame {
 		buchnr = buchnr + 1;
 	}
 	
+	// Erstellt die Tabelle anhand einer Liste von Büchern
 	public void showBuecherTable(Buecher tmp){
 		DefaultTableModel dtm = new DefaultTableModel(0, 0);
 		
-		//set model into the table object
+		//Setze Model
 		table.setModel(dtm);
 		
+		// Setze Tabellenköpfe
 		Object[] o = new Object[] { "Nr", "Titel", "Autor", "ISBN", "Erscheinungsjahr", "Verlag", "Ausgeliehen"};
 		dtm.setColumnIdentifiers(o);
 
-		// add row dynamically into the table      
+		// Tabelle vorher löschen  
 		for(int i = 0; i < dtm.getRowCount(); i++){
 			dtm.removeRow(i);
 		}
