@@ -10,12 +10,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import Model.Ausleihe;
 import Model.Ausleihen;
 import Model.Buch;
 import Model.Buecher;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -31,6 +33,8 @@ public class Buecherverwaltung extends JFrame {
 	private static Kundenverwaltung kv;
 	private static BuchHinzufuegen bhf;
 	private static BuchAusleihen ba;
+	private static UeberfaelligeBuecher ub;
+	private static BuchAusleiheInformation bai;
 	private static int buchnr = 1;
 	private JTable table;
 	private Buecher buecher;
@@ -51,7 +55,7 @@ public class Buecherverwaltung extends JFrame {
 					bv = new Buecherverwaltung();
 					kv.setVisible(false);
 					bv.setVisible(true);
-					kv.setBuecherVerwaltung(bv);
+					kv.setVerwaltungen(bv, bai);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -138,6 +142,26 @@ public class Buecherverwaltung extends JFrame {
 		incBuchNr();
 		buecher.add(buch);
 		
+		Calendar leih = Calendar.getInstance();
+		leih.set(Calendar.YEAR, 2017);
+		leih.set(Calendar.MONTH, 4);
+		leih.set(Calendar.DAY_OF_MONTH, 12);
+		leih.set(Calendar.HOUR_OF_DAY, 0);
+		leih.set(Calendar.MINUTE, 0);
+		leih.set(Calendar.SECOND, 0);
+		leih.set(Calendar.MILLISECOND, 0);
+		
+		Calendar rueck = Calendar.getInstance();
+		rueck.set(Calendar.YEAR, 2017);
+		rueck.set(Calendar.MONTH, 4);
+		rueck.set(Calendar.DAY_OF_MONTH, 19);
+		rueck.set(Calendar.HOUR_OF_DAY, 0);
+		rueck.set(Calendar.MINUTE, 0);
+		rueck.set(Calendar.SECOND, 0);
+		rueck.set(Calendar.MILLISECOND, 0);
+		Ausleihe ausleihe = new Ausleihe(buch, kv.getKunden().get(0), leih.getTime(), rueck.getTime(), 0);
+		ausleihen.add(ausleihe);
+		buch.setAusleihstatus(true);
 		
 		//***************************** INITIALISIERUNG WEITERER GUIS ********************************//
 		bhf = new BuchHinzufuegen();
@@ -147,6 +171,14 @@ public class Buecherverwaltung extends JFrame {
 		ba = new BuchAusleihen();
 		ba.setVisible(false);
 		ba.setVerwaltungen(this, kv);
+		
+		ub = new UeberfaelligeBuecher();
+		ub.setVisible(false);
+		ub.setVerwaltungen(this, kv);
+		
+		bai = new BuchAusleiheInformation();
+		bai.setVisible(false);
+		bai.setVerwaltungen(this, kv);
 		
 		setTitle("B\u00FCcherverwaltung");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -189,6 +221,7 @@ public class Buecherverwaltung extends JFrame {
 		JButton btnNeuesBuch = new JButton("Neues Buch");
 		btnNeuesBuch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				bhf.leereTextFelder();
 				bhf.setVisible(true);
 			}
 		});
@@ -204,6 +237,15 @@ public class Buecherverwaltung extends JFrame {
 				if(row != -1){
 					String str = table.getValueAt(row, 0).toString();
 					int nr = Integer.parseInt(str);
+					
+					// Suche Ausleihe mit BuchNr
+					for(int i = 0; i < ausleihen.size(); i++){
+						if(nr == ausleihen.get(i).getBuch().getBuchnr()){
+							JOptionPane.showMessageDialog(null, "Dieses Buch ist noch ausgeliehen. Löschen nicht möglich", "Fehler", JOptionPane.OK_OPTION);
+							return;
+						}
+					}
+					
 					((DefaultTableModel)table.getModel()).removeRow(row);
 					
 					// Suche Buch mit BuchNr
@@ -215,13 +257,42 @@ public class Buecherverwaltung extends JFrame {
 					}
 				}else{
 					JOptionPane.showMessageDialog(null, "Treffen Sie zuerst eine Wahl", "Fehler", JOptionPane.OK_OPTION);
+					return;
 				}
 			}
 		});
 		btnBuchLoeschen.setBounds(38, 389, 135, 23);
 		contentPane.add(btnBuchLoeschen);
 		
+		
+		//***************************** AUSLEIHE ANZEIGEN BUTTON ******************************//
 		JButton btnAusleiheanzeigen = new JButton("Ausleihe anzeigen");
+		btnAusleiheanzeigen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Ausleihen tmp = new Ausleihen();
+				int row = table.getSelectedRow();
+				if(row != -1){
+					Ausleihe ausleihe = null;
+					String nr = table.getValueAt(row, 0).toString();
+					int nri = Integer.parseInt(nr);
+					
+					// Suche Ausleihe mit BuchNr
+					for(int i = 0; i < ausleihen.size(); i++){
+						if(nri == ausleihen.get(i).getBuch().getBuchnr()){
+							ausleihe = ausleihen.get(i);
+							tmp.add(ausleihe);
+							break;
+						}
+					}
+					
+					bai.showAusleihenTable(tmp);
+					bai.setVisible(true);
+				}else{
+					JOptionPane.showMessageDialog(null, "Treffen Sie zuerst eine Wahl", "Fehler", JOptionPane.OK_OPTION);
+				}
+				
+			}
+		});
 		btnAusleiheanzeigen.setBounds(624, 355, 150, 23);
 		contentPane.add(btnAusleiheanzeigen);
 		
@@ -343,6 +414,16 @@ public class Buecherverwaltung extends JFrame {
 		});
 		btnZuruecksetzen.setBounds(227, 501, 134, 23);
 		contentPane.add(btnZuruecksetzen);
+		
+		JButton btnUeberfaelligeBuecher = new JButton("\u00DCberf\u00E4llige B\u00FCcher");
+		btnUeberfaelligeBuecher.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ub.showUeberfaelligeBuecherTable(ausleihen);
+				ub.setVisible(true);
+			}
+		});
+		btnUeberfaelligeBuecher.setBounds(624, 389, 150, 23);
+		contentPane.add(btnUeberfaelligeBuecher);
 		
 		
 		// Tabelle laden

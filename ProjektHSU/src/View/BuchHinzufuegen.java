@@ -38,6 +38,14 @@ public class BuchHinzufuegen extends JFrame {
 		}
 		return str;
 	}
+	
+	public void leereTextFelder(){
+		textFieldTitel.setText("");
+		textFieldAutor.setText("");
+		textFieldIsbn.setText("");
+		textFieldJahr.setText("");
+		textFieldVerlag.setText("");
+	}
 
 	/**
 	 * Create the frame.

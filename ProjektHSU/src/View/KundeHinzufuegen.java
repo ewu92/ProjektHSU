@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 
@@ -40,6 +41,19 @@ public class KundeHinzufuegen extends JFrame {
 	private JTextField textFieldHausnummer;
 	private JTextField textFieldPlz;
 	private JTextField textFieldEmail;
+	
+	public void leereTextFelder(){
+		textFieldVorname.setText("");
+		textFieldNachname.setText("");
+		textFieldTag.setText("");
+		textFieldMonat.setText("");
+		textFieldJahr.setText("");
+		textFieldWohnort.setText("");
+		textFieldStrasse.setText("");
+		textFieldHausnummer.setText("");
+		textFieldPlz.setText("");
+		textFieldEmail.setText("");
+	}
 	
 	public String getTextWithException(JTextField field) throws Exception{
 		String str = field.getText();
@@ -112,9 +126,17 @@ public class KundeHinzufuegen extends JFrame {
 					return;
 				}
 				
-				String date = tagi + "-" + monati + "-" + jahri;
+				// Geburtsdatum in Kalenderformat
+				Calendar geb = Calendar.getInstance();
+				geb.set(Calendar.YEAR, jahri);
+				geb.set(Calendar.MONTH, (monati-1));
+				geb.set(Calendar.DAY_OF_MONTH, tagi);
+				geb.set(Calendar.HOUR_OF_DAY, 0);
+				geb.set(Calendar.MINUTE, 0);
+				geb.set(Calendar.SECOND, 0);
+				geb.set(Calendar.MILLISECOND, 0);
 				
-				Kunde kunde = new Kunde(kv.getKundenNr(), nachname, vorname, date, ort, plzi, strasse, hausnummeri, email);
+				Kunde kunde = new Kunde(kv.getKundenNr(), nachname, vorname, geb.getTime(), ort, plzi, strasse, hausnummeri, email);
 				kv.incKundenNr();
 				kv.getKunden().add(kunde);
 				kv.showKundenTable();

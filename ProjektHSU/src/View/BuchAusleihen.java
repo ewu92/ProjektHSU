@@ -189,7 +189,15 @@ public class BuchAusleihen extends JFrame {
 					
 					// Aktuelles Datum
 					Calendar now = Calendar.getInstance();
+					now.set(Calendar.HOUR_OF_DAY, 0);
+					now.set(Calendar.MINUTE, 0);
+					now.set(Calendar.SECOND, 0);
+					now.set(Calendar.MILLISECOND, 0);
 					Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MILLISECOND, 0);
 			        cal.add(Calendar.DATE, tage);
 					
 			        // Ausleihe erzeugen
