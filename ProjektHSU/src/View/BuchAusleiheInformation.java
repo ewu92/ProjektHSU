@@ -38,6 +38,7 @@ public class BuchAusleiheInformation extends JFrame {
 	private JButton button;
 	private JButton btnVerlängern;
 	private JTextField textFieldTage;
+	private JButton btnZurueckgeben;
 
 	public void setVerwaltungen(Buecherverwaltung bvn, Kundenverwaltung kvn) {
 		bv = bvn;
@@ -213,5 +214,43 @@ public class BuchAusleiheInformation extends JFrame {
 		textFieldTage.setBounds(582, 294, 69, 20);
 		contentPane.add(textFieldTage);
 		textFieldTage.setColumns(10);
+		
+		btnZurueckgeben = new JButton("Zur\u00FCckgeben");
+		btnZurueckgeben.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				if(row != -1){
+					int index = 0;
+					String nr = table.getValueAt(row, 0).toString();
+					int nri = Integer.parseInt(nr);
+					
+					// Suche BuchIndex mit BuchNr
+					for(int i = 0; i < bv.getBuecher().size(); i++){
+						if(nri == bv.getBuecher().get(i).getBuchnr()){
+							index = i;
+						}
+					}
+					
+					bv.getBuecher().get(index).setAusleihstatus(false);
+					
+					// Suche Ausleihe mit BuchNr
+					for(int i = 0; i < bv.getAusleihen().size(); i++){
+						if(nri == bv.getAusleihen().get(i).getBuch().getBuchnr()){
+							index = i;
+						}
+					}
+					
+					// TODO ZEILE AUS TABELLE LÖSCHEN
+					((DefaultTableModel)table.getModel()).removeRow(row);
+					
+					bv.getAusleihen().removeAtIndex(index);
+					bv.showBuecherTable(bv.getBuecher());
+				}else{
+					JOptionPane.showMessageDialog(null, "Treffen Sie zuerst eine Wahl", "Fehler", JOptionPane.OK_OPTION);
+				}
+			}
+		});
+		btnZurueckgeben.setBounds(199, 293, 132, 23);
+		contentPane.add(btnZurueckgeben);
 	}
 }

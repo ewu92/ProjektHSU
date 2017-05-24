@@ -417,6 +417,8 @@ public class Buecherverwaltung extends JFrame {
 		btnZuruecksetzen.setBounds(227, 501, 134, 23);
 		contentPane.add(btnZuruecksetzen);
 		
+		
+		//***************************** ÜBERFÄLLIGE BÜCHER BUTTON ********************************//
 		JButton btnUeberfaelligeBuecher = new JButton("\u00DCberf\u00E4llige B\u00FCcher");
 		btnUeberfaelligeBuecher.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -426,6 +428,54 @@ public class Buecherverwaltung extends JFrame {
 		});
 		btnUeberfaelligeBuecher.setBounds(624, 389, 150, 23);
 		contentPane.add(btnUeberfaelligeBuecher);
+		
+		
+		//***************************** ZÜRÜCKGEBEN BUTTON ********************************//
+		JButton btnZurueckgeben = new JButton("Zur\u00FCckgeben");
+		btnZurueckgeben.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int row = table.getSelectedRow();
+				boolean ausgeliehen = false;
+				if(row != -1){
+					int index = 0;
+					
+					String str = table.getValueAt(row, 6).toString();
+					if(str.contains("Ja")){
+						ausgeliehen = true;
+					}
+					
+					if(ausgeliehen){
+						String nr = table.getValueAt(row, 0).toString();
+						int nri = Integer.parseInt(nr);
+						
+						// Suche BuchIndex mit BuchNr
+						for(int i = 0; i < buecher.size(); i++){
+							if(nri == buecher.get(i).getBuchnr()){
+								index = i;
+							}
+						}
+						
+						buecher.get(index).setAusleihstatus(false);
+						
+						// Suche Ausleihe mit BuchNr
+						for(int i = 0; i < ausleihen.size(); i++){
+							if(nri == ausleihen.get(i).getBuch().getBuchnr()){
+								index = i;
+							}
+						}
+						
+						ausleihen.removeAtIndex(index);
+						bv.showBuecherTable(buecher);
+					}else{
+						JOptionPane.showMessageDialog(null, "Dieses Buch ist nicht verliehen", "Fehler", JOptionPane.OK_OPTION);
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Treffen Sie zuerst eine Wahl", "Fehler", JOptionPane.OK_OPTION);
+				}
+			}	
+		});
+		btnZurueckgeben.setBounds(39, 457, 134, 23);
+		contentPane.add(btnZurueckgeben);
 		
 		
 		// Tabelle laden
